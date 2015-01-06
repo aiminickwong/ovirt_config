@@ -1,0 +1,56 @@
+#!/usr/bin/python
+# -*- coding: utf-8 -*-
+#
+# ovirt-config-setup.py - Copyright (C) 2012 Red Hat, Inc.
+# Written by Fabian Deutsch <fabiand@redhat.com>
+#
+# This program is free software; you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation; version 2 of the License.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program; if not, write to the Free Software
+# Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
+# MA  02110-1301, USA.  A copy of the GNU General Public License is
+# also available at http://www.gnu.org/copyleft/gpl.html.
+
+"""
+Create an setup application instance an start it.
+"""
+import sys
+import shutil
+if not "/usr/lib/python2.7/site-packages/ovirt" in sys.path:
+    sys.path.append("/usr/lib/python2.7/site-packages/ovirt")
+if not "/usr/lib/python2.7/site-packages/ovirt/license_util" in sys.path:
+    sys.path.append("/usr/lib/python2.7/site-packages/ovirt/license_util")
+if not "/usr/lib/python2.7/site-packages/ovirt/scripts" in sys.path:
+    sys.path.append("/usr/lib/python2.7/site-packages/ovirt/scripts")
+
+
+
+
+
+
+from ovirt.node import app, setup
+from ovirt.node.config import defaults
+import os
+if __name__ == '__main__':
+    if not os.path.exists(defaults.OVIRT_NODE_DEFAULTS_FILENAME):
+        basedir = os.path.dirname(defaults.OVIRT_NODE_DEFAULTS_FILENAME)
+        if not os.path.exists(basedir):
+            os.makedirs(basedir)
+        open(defaults.OVIRT_NODE_DEFAULTS_FILENAME, 'a').close()
+    elif os.path.isdir(defaults.OVIRT_NODE_DEFAULTS_FILENAME):
+        shutil.rmtree(defaults.OVIRT_NODE_DEFAULTS_FILENAME) 
+        basedir = os.path.dirname(defaults.OVIRT_NODE_DEFAULTS_FILENAME)
+        if not os.path.exists(basedir):
+            os.makedirs(basedir)
+        open(defaults.OVIRT_NODE_DEFAULTS_FILENAME, 'a').close()
+ 
+    app = app.Application(setup)
+    app.run()
